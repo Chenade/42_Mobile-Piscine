@@ -52,14 +52,14 @@ class _CalculatorPageState extends State<CalculatorPage> {
 		}
 		else
 		{
-		if (expression == '0') 
-		{
-			expression = buttonText;
-		} 
-		else
-		{
-			expression += buttonText;
-		}
+			if (expression == '0') 
+			{
+				expression = buttonText;
+			} 
+			else
+			{
+				expression += buttonText;
+			}
 		}
     });
   }
