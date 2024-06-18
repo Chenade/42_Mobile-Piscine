@@ -90,24 +90,24 @@ class _CalculatorPageState extends State<CalculatorPage> {
           Expanded(
             flex: 2,
             child: Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(8),
               color: Colors.grey[300],
               alignment: Alignment.bottomRight,
               child: Text(
                 expression,
-                style: const TextStyle(fontSize: 32),
+                style: const TextStyle(fontSize: 20),
               ),
             ),
           ),
           Expanded(
             flex: 1,
             child: Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(8),
               color: Colors.grey[200],
               alignment: Alignment.bottomRight,
               child: Text(
                 result,
-                style: const TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -154,7 +154,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
                     children: <Widget>[
                       buildButton('0'),
                       buildButton('.'),
-                      buildButton('AC'),
+                      buildButton('00'),
                       buildButton('+'),
                     ],
                   ),
@@ -164,6 +164,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
                       buildButton('C'),
+                      buildButton('AC'),
                       buildButton('='),
                     ],
                   ),
