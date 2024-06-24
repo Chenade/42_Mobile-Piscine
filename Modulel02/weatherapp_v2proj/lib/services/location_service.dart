@@ -1,3 +1,4 @@
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
 class LocationService {
@@ -5,13 +6,11 @@ class LocationService {
     bool serviceEnabled;
     LocationPermission permission;
 
-    // Check if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       return Future.error('Location services are disabled.');
     }
 
-    // Check if the user has granted permission.
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
@@ -21,11 +20,29 @@ class LocationService {
     }
 
     if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
       return Future.error('Location permissions are permanently denied.');
     }
 
-    // When we reach here, permissions are granted and we can get the location.
     return await Geolocator.getCurrentPosition();
   }
+
+  Future<String> getCityName(double latitude, double longitude) async {
+    try {
+      if (latitude == 0.0 || longitude == 0.0) {
+        return Future.error('Invalid latitude or longitude');
+      }
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+          latitude,
+          longitude,
+        );
+        if (placemarks.isEmpty) {
+          return Future.error('No placemarks found for the provided coordinates');
+        }
+        print(placemarks[0]);
+        return placemarks[0].locality ?? 'Unknown';
+    } catch (e) {
+      return Future.error('Error occurred while fetching city name: $e');
+    }
+  }
+
 }

@@ -22,6 +22,12 @@ class MyApp extends StatelessWidget {
 }
 
 class MainPage extends StatefulWidget {
+  final String location;
+  final double latitude;
+  final double longitude;
+
+  MainPage({this.location = "Location", this.latitude = 0.0, this.longitude = 0.0});
+
   @override
   _MainPageState createState() => _MainPageState();
 }
@@ -32,11 +38,17 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
   final LocationService _locationService = LocationService();
   List<dynamic> _suggestions = [];
   String _location = "Location";
+  double _latitude = 0.0;
+  double _longitude = 0.0;
+  String? _errorMessage;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+    _location = widget.location;
+    _latitude = widget.latitude;
+    _longitude = widget.longitude;
   }
 
   @override
@@ -50,30 +62,46 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
       final suggestions = await _apiService.getCitySuggestions(query);
       setState(() {
         _suggestions = suggestions;
+        _errorMessage = null;
       });
     } catch (e) {
-      print(e);
+      setState(() {
+        _errorMessage = "Error fetching suggestions. Please try again.";
+      });
+      // _showErrorSnackBar("Error fetching suggestions. Please try again.");
     }
   }
 
   void onCitySelected(Map<String, dynamic> city) {
     setState(() {
-      _location = city['name'];
+      _location = (city['name'] ?? '') + ', ' + (city['admin1'] ?? '') + ', ' + (city['country'] ?? '');
+      _latitude = city['latitude'];
+      _longitude = city['longitude'];
       _suggestions.clear();
+      _errorMessage = null;
     });
-    // Here you can implement the logic to fetch weather data for the selected city
-    // fetchWeather(city['latitude'], city['longitude']);
   }
 
   void getCurrentLocation() async {
     try {
       Position position = await _locationService.getCurrentLocation();
+      // String _city = await _locationrService.getCityName(position.latitude, position.longitude);
       setState(() {
-        _location = '${position.latitude}, ${position.longitude}';
+        _location = 'current location: ' + position.latitude.toString() + ', ' + position.longitude.toString();
+        _latitude = position.latitude;
+        _longitude = position.longitude;
+        _errorMessage = null;
       });
     } catch (e) {
-      print(e);
+      setState(() {
+        _errorMessage = "Error getting current location. Please check your permissions.";
+      });
+      // _showErrorSnackBar("Error getting current location. Please check your permissions.");
     }
+  }
+
+  void _showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
@@ -103,14 +131,33 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
                 },
               ),
             ),
-          // Main Content
+          if (_errorMessage != null)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                _errorMessage!,
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
           Expanded(
             child: TabBarView(
               controller: _tabController,
               children: [
-                CurrentlyTab(location: _location),
-                TodayTab(location: _location),
-                WeeklyTab(location: _location),
+                CurrentlyTab(
+                  location: _location,
+                  latitude: _latitude,
+                  longitude: _longitude,
+                ),
+                TodayTab(
+                  location: _location,
+                  latitude: _latitude,
+                  longitude: _longitude,
+                ),
+                WeeklyTab(
+                  location: _location,
+                  latitude: _latitude,
+                  longitude: _longitude,
+                ),
               ],
             ),
           ),
