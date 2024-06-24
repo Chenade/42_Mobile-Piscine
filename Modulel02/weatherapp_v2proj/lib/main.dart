@@ -41,6 +41,7 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
   double _latitude = 0.0;
   double _longitude = 0.0;
   String? _errorMessage;
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -49,11 +50,16 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
     _location = widget.location;
     _latitude = widget.latitude;
     _longitude = widget.longitude;
+
+    _searchController.addListener(() {
+      fetchSuggestions(_searchController.text);
+    });
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
@@ -68,7 +74,6 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
       setState(() {
         _errorMessage = "Error fetching suggestions. Please try again.";
       });
-      // _showErrorSnackBar("Error fetching suggestions. Please try again.");
     }
   }
 
@@ -85,7 +90,6 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
   void getCurrentLocation() async {
     try {
       Position position = await _locationService.getCurrentLocation();
-      // String _city = await _locationrService.getCityName(position.latitude, position.longitude);
       setState(() {
         _location = 'current location: ' + position.latitude.toString() + ', ' + position.longitude.toString();
         _latitude = position.latitude;
@@ -96,24 +100,33 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
       setState(() {
         _errorMessage = "Error getting current location. Please check your permissions.";
       });
-      // _showErrorSnackBar("Error getting current location. Please check your permissions.");
     }
   }
 
-  void _showErrorSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+  void _onSearchSubmitted(String value) {
+    if (_suggestions.isNotEmpty) {
+      onCitySelected(_suggestions.first);
+    }
+    else
+    {
+      setState(() {
+        _errorMessage = "No suggestions found for the entered query";
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
+        controller: _searchController,
         onSearchChanged: (value) {
           fetchSuggestions(value);
         },
         onLocationPressed: () {
           getCurrentLocation();
         },
+        onSearchSubmitted: _onSearchSubmitted,
       ),
       body: Column(
         children: [

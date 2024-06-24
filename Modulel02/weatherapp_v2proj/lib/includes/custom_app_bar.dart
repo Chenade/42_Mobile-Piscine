@@ -1,34 +1,37 @@
 import 'package:flutter/material.dart';
-
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final TextEditingController controller;
   final Function(String) onSearchChanged;
-  final VoidCallback onLocationPressed;
+  final Function() onLocationPressed;
+  final Function(String) onSearchSubmitted;
 
-  CustomAppBar({required this.onSearchChanged, required this.onLocationPressed});
+  CustomAppBar({
+    required this.controller,
+    required this.onSearchChanged,
+    required this.onLocationPressed,
+    required this.onSearchSubmitted,
+  });
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       title: TextField(
-        onChanged: (value) {
-          onSearchChanged(value);
-        },
+        controller: controller,
         decoration: InputDecoration(
-          hintText: "Search",
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
+          hintText: 'Search location...',
+          suffixIcon: IconButton(
+            icon: Icon(Icons.location_on),
+            onPressed: onLocationPressed,
           ),
         ),
+        onChanged: onSearchChanged,
+        onSubmitted: onSearchSubmitted,
       ),
-      actions: <Widget>[
-        IconButton(
-          icon: Icon(Icons.location_on),
-          onPressed: onLocationPressed,
-        ),
-      ],
     );
   }
 
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
+
+  
 }
