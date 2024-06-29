@@ -50,6 +50,7 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
     _location = widget.location;
     _latitude = widget.latitude;
     _longitude = widget.longitude;
+    getCurrentLocation();
 
     _searchController.addListener(() {
       fetchSuggestions(_searchController.text);
