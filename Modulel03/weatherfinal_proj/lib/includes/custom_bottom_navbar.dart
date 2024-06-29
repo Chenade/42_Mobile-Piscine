@@ -8,9 +8,13 @@ class CustomBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
-      color: Colors.white,
+      color: const Color.fromRGBO(0, 0, 0, 0.9),
       child: TabBar(
         controller: tabController,
+        indicatorColor: Colors.orange,
+        indicatorWeight: 4.0,
+        labelColor: Colors.orange,
+        unselectedLabelColor: Colors.white,
         tabs: const [
           Tab(
             icon: Icon(Icons.settings),

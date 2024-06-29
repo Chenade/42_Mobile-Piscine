@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
@@ -44,6 +45,40 @@ class ApiService {
         return('Thunderstorm');
       default:
         return('Unknown weather code');
+    }
+  }
+
+  IconData getWeatherIcon(String code) {
+    // print(code);
+    switch (code) {
+      case '0':
+        return Icons.wb_sunny;
+      case '1':
+        return Icons.wb_sunny;
+      case '2':
+        return Icons.wb_cloudy;
+      case '3':
+        return Icons.wb_cloudy;
+      case '45':
+        return Icons.cloud;
+      case '48':
+        return Icons.cloud;
+      case '51':
+        return Icons.cloud;
+      case '53':
+        return Icons.cloud;
+      case '56':
+        return Icons.cloud;
+      case '60':
+        return Icons.ac_unit;
+      case '63':
+        return Icons.ac_unit;
+      case '66':
+        return Icons.ac_unit;
+      case '80':
+        return Icons.flash_on;
+      default:
+        return Icons.error;
     }
   }
 

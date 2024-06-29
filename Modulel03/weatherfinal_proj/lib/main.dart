@@ -67,10 +67,18 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
   void fetchSuggestions(String query) async {
     try {
       final suggestions = await _apiService.getCitySuggestions(query);
-      setState(() {
-        _suggestions = suggestions;
-        _errorMessage = null;
-      });
+      if (suggestions.isEmpty) {
+        setState(() {
+          _suggestions = [];
+          _errorMessage = "No suggestions found for the entered query";
+        });
+      } else {
+        setState(() {
+          // up to five suggestions
+          _suggestions = suggestions.sublist(0, suggestions.length > 5 ? 5 : suggestions.length);
+          _errorMessage = null;
+        });
+      }
     } catch (e) {
       setState(() {
         _errorMessage = "Error fetching suggestions. Please try again.";
@@ -92,7 +100,7 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
     try {
       Position position = await _locationService.getCurrentLocation();
       setState(() {
-        _location = 'current location: ' + position.latitude.toString() + ', ' + position.longitude.toString();
+        _location = position.latitude.toString() + ', ' + position.longitude.toString();
         _latitude = position.latitude;
         _longitude = position.longitude;
         _errorMessage = null;
@@ -119,6 +127,7 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromRGBO(0, 0, 0, 0.9),
       appBar: CustomAppBar(
         controller: _searchController,
         onSearchChanged: (value) {
@@ -150,31 +159,32 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 _errorMessage!,
-                style: TextStyle(color: Colors.red),
+                style: const TextStyle(color: Colors.red),
+              ),
+            )
+          else
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  CurrentlyTab(
+                    location: _location,
+                    latitude: _latitude,
+                    longitude: _longitude,
+                  ),
+                  TodayTab(
+                    location: _location,
+                    latitude: _latitude,
+                    longitude: _longitude,
+                  ),
+                  WeeklyTab(
+                    location: _location,
+                    latitude: _latitude,
+                    longitude: _longitude,
+                  ),
+                ],
               ),
             ),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                CurrentlyTab(
-                  location: _location,
-                  latitude: _latitude,
-                  longitude: _longitude,
-                ),
-                TodayTab(
-                  location: _location,
-                  latitude: _latitude,
-                  longitude: _longitude,
-                ),
-                WeeklyTab(
-                  location: _location,
-                  latitude: _latitude,
-                  longitude: _longitude,
-                ),
-              ],
-            ),
-          ),
         ],
       ),
       bottomNavigationBar: CustomBottomNavBar(tabController: _tabController),

@@ -15,12 +15,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      backgroundColor: const Color.fromRGBO(0, 0, 0, 0.9),
       title: TextField(
         controller: controller,
         decoration: InputDecoration(
           hintText: 'Search location...',
+          hintStyle: const TextStyle(color: Colors.grey),
           suffixIcon: IconButton(
-            icon: Icon(Icons.location_on),
+            icon: const Icon(Icons.location_on),
             onPressed: onLocationPressed,
           ),
         ),
