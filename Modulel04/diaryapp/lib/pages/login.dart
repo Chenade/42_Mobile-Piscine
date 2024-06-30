@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:auth0_flutter/auth0_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
+import './home.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -9,15 +12,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  Credentials? _credentials;
-  late Auth0 auth0;
-
-  @override
-  void initState() {
-    super.initState();
-    auth0 = Auth0('dev-aelqdrh6hx6twsln.us.auth0.com', 'iQ3FUZ079MZEL0piWVGl36fI4NWcxOhL');
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,23 +33,60 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (_credentials == null) 
-              ElevatedButton(
-                onPressed: () async {
-                  try {
-                    final credentials = await auth0.webAuthentication(scheme: 'https').login();
-                    setState(() {
-                      _credentials = credentials;
-                    });
-                  } catch (e) {
-                    print('Error during login: $e');
-                  }
-                },
-                child: const Text("Log in")
-              )
+            SignInButton(
+              Buttons.Google,
+              text: 'Sign in with Google',
+              onPressed: () => _signInWithGoogle(),
+            ),
+            SignInButton(
+              Buttons.GitHub,
+              text: 'Sign in with Github',
+              onPressed: () => _signInWithGoogle(),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _signInWithGoogle() async {
+      const List<String> scopes = <String>[
+        'email',
+        'https://www.googleapis.com/auth/contacts.readonly',
+      ];
+
+
+      GoogleSignIn _googleSignIn = GoogleSignIn(
+        // Optional clientId
+        // clientId: 'your-client_id.apps.googleusercontent.com',
+        scopes: scopes,
+      );
+      try {
+        await _googleSignIn.signIn();
+      } catch (error) {
+        print(error);
+      }
+    // try {
+    //   final GoogleSignInAccount? googleUser = await GoogleSignIn(
+    //     scopes: scopes
+    //   );
+    //   if (googleUser != null) {
+    //     final GoogleSignInAuthentication googleAuth =
+    //         await googleUser.authentication;
+    //     final OAuthCredential credential = GoogleAuthProvider.credential(
+    //       accessToken: googleAuth.accessToken,
+    //       idToken: googleAuth.idToken,
+    //     );
+    //     await FirebaseAuth.instance.signInWithCredential(credential);
+    //     if (mounted) {
+    //       Navigator.of(context).pushAndRemoveUntil(
+    //         MaterialPageRoute(builder: (context) => const HomePage()),
+    //         (Route<dynamic> route) => false,
+    //       );
+    //     }
+    //   }
+    // } catch (e) {
+    //   print(e);
+    // }
   }
 }

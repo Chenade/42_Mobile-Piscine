@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "87957247657",
+    "project_id": "diaryapp-ykuo",
+    "storage_bucket": "diaryapp-ykuo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:87957247657:android:510c27ada53609677cfbb8",
+        "android_client_info": {
+          "package_name": "com.example.diaryapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvBT7egMWsedyD78v40RFIUsQeRoV1BwQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

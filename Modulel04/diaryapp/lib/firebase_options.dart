@@ -21,10 +21,7 @@ class DefaultFirebaseOptions {
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for android - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return android;
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
@@ -79,6 +76,14 @@ class DefaultFirebaseOptions {
     authDomain: 'diaryapp-ykuo.firebaseapp.com',
     storageBucket: 'diaryapp-ykuo.appspot.com',
     measurementId: 'G-FE44PFSFPF',
+  );
+
+  static const FirebaseOptions android = FirebaseOptions(
+    apiKey: 'AIzaSyCvBT7egMWsedyD78v40RFIUsQeRoV1BwQ',
+    appId: '1:87957247657:android:510c27ada53609677cfbb8',
+    messagingSenderId: '87957247657',
+    projectId: 'diaryapp-ykuo',
+    storageBucket: 'diaryapp-ykuo.appspot.com',
   );
 
 }
