@@ -79,7 +79,7 @@ class _CurrentlyTabState extends State<CurrentlyTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(0, 0, 0, 1.0),
+      backgroundColor: Colors.transparent,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -134,12 +134,12 @@ class _CurrentlyTabState extends State<CurrentlyTab> {
                       children: [
                         const Icon(
                           Icons.air,
-                          color: Colors.lightBlue,
+                          color: Colors.black,
                           size: 20,
                         ),
                         Text(
                           '  $windSpeed m/s',
-                          style: const TextStyle(color: Colors.lightBlue),
+                          style: const TextStyle(color: Colors.black),
                         ),
                       ],
                     ),

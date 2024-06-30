@@ -26,13 +26,15 @@ class MainPage extends StatefulWidget {
   final double latitude;
   final double longitude;
 
-  MainPage({this.location = "Location", this.latitude = 0.0, this.longitude = 0.0});
+  MainPage(
+      {this.location = "Location", this.latitude = 0.0, this.longitude = 0.0});
 
   @override
   _MainPageState createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin {
+class _MainPageState extends State<MainPage>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final ApiService _apiService = ApiService();
   final LocationService _locationService = LocationService();
@@ -65,6 +67,10 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
   }
 
   void fetchSuggestions(String query) async {
+    if (query.length < 3)
+    {
+      return ;
+    }
     try {
       final suggestions = await _apiService.getCitySuggestions(query);
       if (suggestions.isEmpty) {
@@ -75,7 +81,8 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
       } else {
         setState(() {
           // up to five suggestions
-          _suggestions = suggestions.sublist(0, suggestions.length > 5 ? 5 : suggestions.length);
+          _suggestions = suggestions.sublist(
+              0, suggestions.length > 5 ? 5 : suggestions.length);
           _errorMessage = null;
         });
       }
@@ -88,7 +95,11 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
 
   void onCitySelected(Map<String, dynamic> city) {
     setState(() {
-      _location = (city['name'] ?? '') + ', ' + (city['admin1'] ?? '') + ', ' + (city['country'] ?? '');
+      _location = (city['name'] ?? '') +
+          ', ' +
+          (city['admin1'] ?? '') +
+          ', ' +
+          (city['country'] ?? '');
       _latitude = city['latitude'];
       _longitude = city['longitude'];
       _suggestions.clear();
@@ -100,14 +111,16 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
     try {
       Position position = await _locationService.getCurrentLocation();
       setState(() {
-        _location = position.latitude.toString() + ', ' + position.longitude.toString();
+        _location =
+            position.latitude.toString() + ', ' + position.longitude.toString();
         _latitude = position.latitude;
         _longitude = position.longitude;
         _errorMessage = null;
       });
     } catch (e) {
       setState(() {
-        _errorMessage = "Error getting current location. Please check your permissions.";
+        _errorMessage =
+            "Error getting current location. Please check your permissions.";
       });
     }
   }
@@ -115,9 +128,7 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
   void _onSearchSubmitted(String value) {
     if (_suggestions.isNotEmpty) {
       onCitySelected(_suggestions.first);
-    }
-    else
-    {
+    } else {
       setState(() {
         _errorMessage = "No suggestions found for the entered query";
       });
@@ -127,7 +138,8 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(0, 0, 0, 0.9),
+      // backgroundColor:
+      //     Colors.transparent,
       appBar: CustomAppBar(
         controller: _searchController,
         onSearchChanged: (value) {
@@ -138,53 +150,69 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
         },
         onSearchSubmitted: _onSearchSubmitted,
       ),
-      body: Column(
+      body: Stack(
         children: [
-          if (_suggestions.isNotEmpty)
-            Expanded(
-              child: ListView.builder(
-                itemCount: _suggestions.length,
-                itemBuilder: (context, index) {
-                  final suggestion = _suggestions[index];
-                  return ListTile(
-                    title: Text(suggestion['name']),
-                    subtitle: Text('${suggestion['admin1']}, ${suggestion['country']}'),
-                    onTap: () => onCitySelected(suggestion),
-                  );
-                },
-              ),
+          Positioned.fill(
+            child: Image.asset(
+              './assets/background.jpg',
+              fit: BoxFit.cover,
             ),
-          if (_errorMessage != null)
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                _errorMessage!,
-                style: const TextStyle(color: Colors.red),
-              ),
-            )
-          else
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: [
-                  CurrentlyTab(
-                    location: _location,
-                    latitude: _latitude,
-                    longitude: _longitude,
+          ),
+          Column(
+            children: [
+              if (_suggestions.isNotEmpty)
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: _suggestions.length,
+                    itemBuilder: (context, index) {
+                      final suggestion = _suggestions[index];
+                      return ListTile(
+                        title: Text(suggestion['name'],
+                            style: const TextStyle(color: Colors.white)),
+                        subtitle: Text(
+                            '${suggestion['admin1']}, ${suggestion['country']}'),
+                        onTap: () => onCitySelected(suggestion),
+                      );
+                    },
                   ),
-                  TodayTab(
-                    location: _location,
-                    latitude: _latitude,
-                    longitude: _longitude,
+                ),
+              if (_errorMessage != null)
+                Flexible(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      _errorMessage!,
+                      style: const TextStyle(color: Colors.red),
+                    ),
                   ),
-                  WeeklyTab(
-                    location: _location,
-                    latitude: _latitude,
-                    longitude: _longitude,
+                ),
+              )
+              else
+                Expanded(
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: [
+                      CurrentlyTab(
+                        location: _location,
+                        latitude: _latitude,
+                        longitude: _longitude,
+                      ),
+                      TodayTab(
+                        location: _location,
+                        latitude: _latitude,
+                        longitude: _longitude,
+                      ),
+                      WeeklyTab(
+                        location: _location,
+                        latitude: _latitude,
+                        longitude: _longitude,
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
+                ),
+            ],
+          ),
         ],
       ),
       bottomNavigationBar: CustomBottomNavBar(tabController: _tabController),

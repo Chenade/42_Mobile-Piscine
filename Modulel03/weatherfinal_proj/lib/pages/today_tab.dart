@@ -82,7 +82,7 @@ class _TodayTabState extends State<TodayTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(0, 0, 0, 1.0),
+      backgroundColor: Colors.transparent,
       body: Center(
         child: SingleChildScrollView(
           child: Column(
@@ -111,6 +111,8 @@ class _TodayTabState extends State<TodayTab> {
                   primaryXAxis: CategoryAxis(),
                   series: <ChartSeries<_ChartData, String>>[
                     LineSeries<_ChartData, String>(
+                      name: 'Today\'s weather',
+                      color: Colors.yellow,
                       dataSource: _generateChartData(),
                       xValueMapper: (_ChartData data, _) => data.time,
                       yValueMapper: (_ChartData data, _) => data.temperature,
@@ -164,12 +166,12 @@ class _TodayTabState extends State<TodayTab> {
                               children: [
                                 const Icon(
                                   Icons.air,
-                                  color: Colors.lightBlue,
+                                  color: Colors.black,
                                   size: 20,
                                 ),
                                 Text(
                                   '${hourlyWeather[time]['wind_speed']} km/s',
-                                  style: const TextStyle(color: Colors.lightBlue),
+                                  style: const TextStyle(color: Colors.black),
                                 ),
                               ],
                             ),

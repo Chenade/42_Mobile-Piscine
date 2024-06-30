@@ -95,7 +95,7 @@ class _WeeklyTabState extends State<WeeklyTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(0, 0, 0, 1.0),
+      backgroundColor: Colors.transparent,
       body: Center(
         child: SingleChildScrollView(
           child: Column(
@@ -135,6 +135,7 @@ class _WeeklyTabState extends State<WeeklyTab> {
                   series: <ChartSeries<_ChartData, String>>[
                     LineSeries<_ChartData, String>(
                       name: 'Min Temperature',
+                      color: Colors.orange,
                       dataSource: _generateMinChartData(),
                       xValueMapper: (_ChartData data, _) => data.time,
                       yValueMapper: (_ChartData data, _) =>
@@ -145,6 +146,7 @@ class _WeeklyTabState extends State<WeeklyTab> {
                     LineSeries<_ChartData, String>(
                       name: 'Max Temperature',
                       dataSource: _generateMaxChartData(),
+                      color: Colors.red,
                       xValueMapper: (_ChartData data, _) => data.time,
                       yValueMapper: (_ChartData data, _) =>
                           data.temperature,
@@ -192,7 +194,7 @@ class _WeeklyTabState extends State<WeeklyTab> {
                             ),
                             Text(
                               'Min: ${hourlyWeather[time]['temperature_min']}°C',
-                              style: const TextStyle(color: Colors.lightBlue, fontSize: 13),
+                              style: const TextStyle(color: Colors.orange, fontSize: 13),
                             ),
                           ],
                         ),
