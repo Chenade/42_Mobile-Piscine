@@ -1,79 +1,136 @@
+// pages/profile.dart
+import 'dart:async';
+import 'dart:convert' show json;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:diaryapp/screens/entry_creation_page.dart';
-// import 'package:diaryapp/widgets/entries_list.dart';
-// import 'package:diaryapp/widgets/feeling_ratios.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart' as http;
+import '../services/google_sign_in_provider.dart'; // Import the GoogleSignIn instance
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({super.key});
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final User? user = FirebaseAuth.instance.currentUser;
+  GoogleSignInAccount? _currentUser;
+  bool _isAuthorized = false;
+  String _contactText = '';
 
-  Future<void> _signOut(BuildContext context) async {
-    await _auth.signOut();
-    if (mounted) {
-      Navigator.of(context).pushReplacementNamed('/');
+  @override
+  void initState() {
+    super.initState();
+
+    googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount? account) async {
+      bool isAuthorized = account != null;
+      if (kIsWeb && account != null) {
+        isAuthorized = await googleSignIn.canAccessScopes(googleSignIn.scopes);
+      }
+
+      setState(() {
+        _currentUser = account;
+        _isAuthorized = isAuthorized;
+      });
+
+      if (isAuthorized) {
+        unawaited(_handleGetContact(account!));
+      }
+    });
+
+    googleSignIn.signInSilently();
+  }
+
+  Future<void> _handleGetContact(GoogleSignInAccount user) async {
+    setState(() {
+      _contactText = 'Loading contact info...';
+    });
+    final http.Response response = await http.get(
+      Uri.parse('https://people.googleapis.com/v1/people/me/connections'
+          '?requestMask.includeField=person.names'),
+      headers: await user.authHeaders,
+    );
+    if (response.statusCode != 200) {
+      setState(() {
+        _contactText = 'People API gave a ${response.statusCode} response. Check logs for details.';
+      });
+      print('People API ${response.statusCode} response: ${response.body}');
+      return;
     }
+    final Map<String, dynamic> data = json.decode(response.body) as Map<String, dynamic>;
+    final String? namedContact = _pickFirstNamedContact(data);
+    setState(() {
+      if (namedContact != null) {
+        _contactText = 'I see you know $namedContact!';
+      } else {
+        _contactText = 'No contacts to display.';
+      }
+    });
+  }
+
+  String? _pickFirstNamedContact(Map<String, dynamic> data) {
+    final List<dynamic>? connections = data['connections'] as List<dynamic>?;
+    final Map<String, dynamic>? contact = connections?.firstWhere(
+      (dynamic contact) => (contact as Map<Object?, dynamic>)['names'] != null,
+      orElse: () => null,
+    ) as Map<String, dynamic>?;
+    if (contact != null) {
+      final List<dynamic> names = contact['names'] as List<dynamic>;
+      final Map<String, dynamic>? name = names.firstWhere(
+        (dynamic name) => (name as Map<Object?, dynamic>)['displayName'] != null,
+        orElse: () => null,
+      ) as Map<String, dynamic>?;
+      if (name != null) {
+        return name['displayName'] as String?;
+      }
+    }
+    return null;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: Colors.deepPurpleAccent.withOpacity(0.5),
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CircleAvatar(
-              backgroundColor: Colors.white,
-              backgroundImage:
-                  user?.photoURL != null ? NetworkImage(user!.photoURL!) : null,
-              child: user?.photoURL == null
-                  ? const Icon(Icons.person, color: Colors.grey)
-                  : null,
+    final GoogleSignInAccount? user = _currentUser;
+    if (user != null) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          ListTile(
+            leading: GoogleUserCircleAvatar(
+              identity: user,
             ),
-            const SizedBox(width: 10),
-            Text(user?.displayName ?? 'Guest',
-                style: const TextStyle(fontSize: 20)),
+            title: Text(user.displayName ?? ''),
+            subtitle: Text(user.email),
+          ),
+          const Text('Signed in successfully.'),
+          if (_isAuthorized) ...<Widget>[
+            Text(_contactText),
+            ElevatedButton(
+              child: const Text('REFRESH'),
+              onPressed: () => _handleGetContact(user),
+            ),
           ],
-        ),
-        actions: [
-          IconButton(
-              icon: const Icon(Icons.logout),
-              onPressed: () => _signOut(context))
+          if (!_isAuthorized) ...<Widget>[
+            const Text('Additional permissions needed to read your contacts.'),
+            ElevatedButton(
+              onPressed: () async {
+                final bool isAuthorized = await googleSignIn.requestScopes(googleSignIn.scopes);
+                setState(() {
+                  _isAuthorized = isAuthorized;
+                });
+                if (isAuthorized) {
+                  unawaited(_handleGetContact(_currentUser!));
+                }
+              },
+              child: const Text('REQUEST PERMISSIONS'),
+            ),
+          ],
         ],
-      ),
-      // body: SingleChildScrollView(
-      //   child: Column(
-      //     children: [
-      //       // EntriesList(
-      //       //   entryStream: _firestore
-      //       //       .collection('diary_entries')
-      //       //       .where('userMail', isEqualTo: user?.email)
-      //       //       .orderBy('date', descending: true)
-      //       //       .limit(2)
-      //       //       .snapshots(),
-      //       // ),
-      //       // FeelingRatios(userEmail: user?.email),
-      //     ],
-      //   ),
-      // ),
-      // floatingActionButton: FloatingActionButton(
-      //   child: const Icon(Icons.add),
-      //   onPressed: () {
-      //     Navigator.of(context).push(MaterialPageRoute(
-      //         builder: (context) => const EntryCreationPage()));
-      //   },
-      // ),
-    );
+      );
+    } else {
+      return const Center(
+        child: Text('You are not currently signed in.'),
+      );
+    }
   }
 }

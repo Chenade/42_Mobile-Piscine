@@ -12,7 +12,20 @@
           "package_name": "com.example.diaryapp"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "86189083537-pg755qn4sr4ornrser88295n1j89mc1h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.diaryapp",
+            "certificate_hash": "b102d3b206de6f5388e8fe84a29b929b5cfc0b84"
+          }
+        },
+        {
+          "client_id": "86189083537-pg755qn4sr4ornrser88295n1j89mc1h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCvBT7egMWsedyD78v40RFIUsQeRoV1BwQ"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "86189083537-pg755qn4sr4ornrser88295n1j89mc1h.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "86189083537-pg755qn4sr4ornrser88295n1j89mc1h.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.diaryapp"
+              }
+            }
+          ]
         }
       }
     }
