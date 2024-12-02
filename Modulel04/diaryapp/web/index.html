@@ -3,29 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Google Sign In</title>
-  <script src="https://apis.google.com/js/api.js"></script>
 </head>
 <body>
-  <script>
-    function initializeGapi() {
-      gapi.load('client:auth2', function() {
-        gapi.client.init({
-          clientId: '86189083537-pg755qn4sr4ornrser88295n1j89mc1h.apps.googleusercontent.com',
-          scope: 'email https://www.googleapis.com/auth/contacts.readonly'
-        }).then(function () {
-          // Initialize the Google Sign-In library after gapi.client.init.
-          FlutterGoogleSignIn.initialize();
-        });
-      });
-    }
-  </script>
-  <script>
-    if (document.readyState === 'complete') {
-      initializeGapi();
-    } else {
-      window.addEventListener('load', initializeGapi);
-    }
-  </script>
   <script src="main.dart.js"></script>
 </body>
 </html>

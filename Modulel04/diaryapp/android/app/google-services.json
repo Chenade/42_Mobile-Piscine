@@ -14,7 +14,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "86189083537-pg755qn4sr4ornrser88295n1j89mc1h.apps.googleusercontent.com",
+          "client_id": "786189083537-pg755qn4sr4ornrser88295n1j89mc1h.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.diaryapp",
@@ -22,7 +22,7 @@
           }
         },
         {
-          "client_id": "86189083537-pg755qn4sr4ornrser88295n1j89mc1h.apps.googleusercontent.com",
+          "client_id": "786189083537-pg755qn4sr4ornrser88295n1j89mc1h.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -35,11 +35,11 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "86189083537-pg755qn4sr4ornrser88295n1j89mc1h.apps.googleusercontent.com",
+              "client_id": "786189083537-pg755qn4sr4ornrser88295n1j89mc1h.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "86189083537-pg755qn4sr4ornrser88295n1j89mc1h.apps.googleusercontent.com",
+              "client_id": "786189083537-pg755qn4sr4ornrser88295n1j89mc1h.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.example.diaryapp"

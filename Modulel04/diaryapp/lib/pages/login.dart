@@ -1,38 +1,30 @@
-// pages/login.dart
 import 'package:flutter/material.dart';
-import '../services/'; // Import the GoogleSignIn instance
-import 'home.dart';
+import 'package:sign_in_button/sign_in_button.dart';
+import '../services/google.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
-
-  @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  Future<void> _handleSignIn() async {
-    try {
-      await googleSignIn.signIn();
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
-      );
-    } catch (error) {
-      print(error);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login Page'),
-      ),
+      appBar: AppBar(title: const Text('Login')),
       body: Center(
-        child: ElevatedButton(
-          onPressed: _handleSignIn,
-          child: const Text('Sign in with Google'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text('Please sign in to continue'),
+            const SizedBox(height: 20),
+            SignInButton(
+              Buttons.google,
+              onPressed: () async {
+                await GoogleSignInService.signIn();
+                if (GoogleSignInService.currentUser != null) {
+                  Navigator.pushReplacementNamed(context, '/');
+                }
+              },
+            ),
+          ],
         ),
       ),
     );

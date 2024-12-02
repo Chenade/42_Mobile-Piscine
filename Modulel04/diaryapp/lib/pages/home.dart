@@ -1,32 +1,51 @@
-// pages/home.dart
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'profile.dart';
-import '../services/google_sign_in_provider.dart'; // Import the GoogleSignIn instance
-import 'login.dart'; // Import the LoginPage for navigation
+import '../services/google.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  final GoogleSignInAccount? user;
+
+  const HomePage({super.key, this.user});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home Page'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () async {
-              await googleSignIn.disconnect();
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginPage()),
-              );
-            },
-          ),
-        ],
+      appBar: AppBar(title: const Text('Home')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              user != null
+                  ? 'Welcome, ${user!.displayName}!'
+                  : 'Welcome to the Home Page!',
+              style: const TextStyle(fontSize: 18),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                if (user != null) {
+                  Navigator.pushNamed(context, '/profile');
+                } else {
+                  Navigator.pushNamed(context, '/');
+                }
+              },
+              child: Text(user != null ? 'Go to Profile' : 'Login'),
+            ),
+            if (user != null) ...[
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () async {
+                  await GoogleSignInService.signOut();
+                  Navigator.pushReplacementNamed(context, '/');
+                },
+                child: const Text('Sign Out'),
+              ),
+            ],
+          ],
+        ),
       ),
-      body: const ProfilePage(),
     );
   }
 }
