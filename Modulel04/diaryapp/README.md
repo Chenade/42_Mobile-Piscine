@@ -1,18 +1,14 @@
-# diaryapp
+# Mobile Piscine (Flutter)
 
-A new Flutter project.
+## Diary App
+>Your new application will be a diary app.
+It will allow you to create, read, and delete diary entries.
+The diary will be protected by an authentication system.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
-- curl -sL https://firebase.tools | bash
+### This Module includes:
+- Authentication system 
+    > Login with Google API
+- Database
+    >Conecting to database
