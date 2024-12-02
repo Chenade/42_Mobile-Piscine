@@ -29,12 +29,13 @@ class ProfilePage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   CircleAvatar(
-                    backgroundImage: NetworkImage(user.photoUrl ?? ''),
+                    backgroundImage: NetworkImage(user.photoURL ?? ''),
                     radius: 40,
                   ),
                   const SizedBox(height: 10),
-                  Text(user.displayName ?? '', style: const TextStyle(fontSize: 20)),
-                  Text(user.email, style: const TextStyle(fontSize: 16)),
+                  Text(user.displayName  ?? '',
+                      style: const TextStyle(fontSize: 20)),
+                  Text(user.email ?? ""),
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () async {
