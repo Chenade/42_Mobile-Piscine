@@ -15,7 +15,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: const Color.fromRGBO(0, 0, 0, 0.9),
+      backgroundColor: const Color.fromRGBO(255, 255, 255, 0.9),
       title: TextField(
         controller: controller,
         decoration: InputDecoration(
@@ -33,7 +33,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => constSize.fromHeight(kToolbarHeight);
 
   
 }
