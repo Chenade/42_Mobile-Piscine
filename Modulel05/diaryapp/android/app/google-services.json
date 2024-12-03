@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "87957247657",
+    "project_id": "diaryapp-ykuo",
+    "storage_bucket": "diaryapp-ykuo.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:87957247657:android:510c27ada53609677cfbb8",
+        "android_client_info": {
+          "package_name": "com.example.diaryapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "87957247657-t8gvqr8chj1o9ofeetrs67hqsrqk0tda.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.diaryapp",
+            "certificate_hash": "b102d3b206de6f5388e8fe84a29b929b5cfc0b84"
+          }
+        },
+        {
+          "client_id": "87957247657-p9rdiu8sn5c29nn80vgpmmuni3jbglle.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvBT7egMWsedyD78v40RFIUsQeRoV1BwQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "87957247657-jdtm73mm1t4ehnsj734e8gi4dr1o9bm7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "87957247657-c9qqhpustnogl4g2gs9a2nsgtk4r2mii.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.diaryapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
