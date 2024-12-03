@@ -1,10 +1,11 @@
 import 'dart:developer';
 
+import 'package:diaryapp/pages/personal.dart';
 import 'package:flutter/material.dart';
 import 'services/google.dart';
 import 'pages/login.dart';
 // import 'pages/home.dart';
-import 'pages/profile.dart';
+// import 'pages/profile.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -57,7 +58,7 @@ class AuthWrapper extends StatelessWidget {
     final user = GoogleSignInService.currentUser;
 
     if (user != null) {
-      return const ProfilePage();
+      return const PersonalPage();
     }
     return const LoginPage();
   }

@@ -8,12 +8,12 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
+      appBar: AppBar(title: const Text('Diary App')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text('Please sign in to continue'),
+            const Text('Please login with your Google account'),
             const SizedBox(height: 20),
             SignInButton(
               Buttons.google,
