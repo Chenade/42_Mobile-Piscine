@@ -37,6 +37,10 @@ class FirebaseDiaryService {
   }
 
   static Future<void> deleteDiaryEntry(String id) async {
+    var currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) {
+      return;
+    }
     try {
       await _diaryCollection.doc(id).delete();
     } catch (e) {
@@ -46,6 +50,10 @@ class FirebaseDiaryService {
 
   static Future<void> updateDiaryEntry(
       String id, String title, String content, String feeling) async {
+    var currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) {
+      return;
+    }
     try {
       await _diaryCollection.doc(id).update({
         'title': title,
