@@ -1,4 +1,5 @@
 import 'package:diaryapp/modal/openDiaryEntry.dart';
+import 'package:diaryapp/pages/agenda.dart';
 import 'package:diaryapp/pages/profile.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +16,7 @@ class _PersonalPageState extends State<PersonalPage> with SingleTickerProviderSt
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 1, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
   }
 
   @override
@@ -32,14 +33,16 @@ class _PersonalPageState extends State<PersonalPage> with SingleTickerProviderSt
         onPressed: () => openDiaryEntry(context, null, null, null, null, null),
         child: const Icon(Icons.edit),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      backgroundColor: Colors.brown[100],
       body: Stack(
         children: [
-          Positioned.fill(
-            child: Image.asset(
-              '../assets/background.jpg',
-              fit: BoxFit.cover,
-            ),
-          ),
+          // Positioned.fill(
+          //   child: Image.asset(
+          //     '../assets/background.jpg',
+          //     fit: BoxFit.cover,
+          //   ),
+          // ),
           Column(
             children: [
               Expanded(
@@ -47,6 +50,7 @@ class _PersonalPageState extends State<PersonalPage> with SingleTickerProviderSt
                   controller: _tabController,
                   children: const [
                     ProfilePage(),
+                    AgendaPage(),
                   ],
                 ),
               ),
@@ -54,16 +58,20 @@ class _PersonalPageState extends State<PersonalPage> with SingleTickerProviderSt
           ),
         ],
       ),
-      bottomNavigationBar:
-      TabBar(
-        controller: _tabController,
-        tabs: const [
-          Tab(
-            icon: Icon(Icons.person),
-            text: 'Profile',
-          ),
-        ],
-      ),
+      bottomNavigationBar: 
+        TabBar(
+          controller: _tabController,
+          tabs: const [
+            Tab(
+              icon: Icon(Icons.person),
+              text: 'Profile',
+            ),
+            Tab(
+              icon: Icon(Icons.calendar_today),
+              text: 'Agenda',
+            ),
+          ],
+        ),
     );
   }
 }

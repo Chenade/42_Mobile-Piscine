@@ -6,7 +6,18 @@ class FirebaseDiaryService {
   static final CollectionReference _diaryCollection =
       FirebaseFirestore.instance.collection('diary');
 
-  static Stream<QuerySnapshot> getDiaryEntries() {
+  static Stream<QuerySnapshot> getDairyCount() {
+    var currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) {
+      return const Stream.empty();
+    }
+    
+    return _diaryCollection
+        .where('user_email', isEqualTo: currentUser.email)
+        .snapshots();
+  }
+
+  static Stream<QuerySnapshot> getAllDiaryEntries() {
     var currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser == null) {
       return const Stream.empty();
@@ -15,6 +26,38 @@ class FirebaseDiaryService {
         .where('user_email', isEqualTo: currentUser.email)
         .orderBy('created_at', descending: true)
         .snapshots();
+  }
+
+  static Stream<QuerySnapshot> getDiaryTwoEntries() {
+    var currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) {
+      return const Stream.empty();
+    }
+    return _diaryCollection
+        .where('user_email', isEqualTo: currentUser.email)
+        .orderBy('created_at', descending: true)
+        .limit(2)
+        .snapshots();
+  }
+
+  static Stream<QuerySnapshot> getDiaryEntriesByDate(DateTime date) {
+    var currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) {
+      return const Stream.empty();
+    }
+    DateTime startOfDayUtc = DateTime(date.year, date.month, date.day).toUtc();
+    DateTime endOfDayUtc = startOfDayUtc.add(const Duration(days: 1));
+
+    return _diaryCollection
+        .where('user_email', isEqualTo: currentUser.email)
+        .where(
+          'created_at',
+          isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDayUtc),
+          isLessThan: Timestamp.fromDate(endOfDayUtc),
+        )
+        .orderBy('created_at', descending: true)
+        .snapshots();
+
   }
 
   static Future<void> createDiaryEntry(
