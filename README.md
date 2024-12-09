@@ -17,13 +17,13 @@ flutter run -d chrome --web-hostname localhost --web-port 9000
 | Name              | Result             | Validation Date  |
 |-------------------|--------------------|------------------|
 ||
-| **Weather Forcast App**     |                        |                  |
+| **Weather Forecast App**     |                        |                  |
 |  Mobile - 0 - Basic-of-the-mobile-application  | 100/100     |  June 19, 2024     |
 |  Mobile - 1 - Structure and logic  | 100/100     |  June 20, 2024     |
 |  Mobile - 2 - API and data  | 100/100     |  June 25, 2024     |
 |  Mobile - 3 - Design | 100/100     | July 02, 2024     |
 ||
-| **Weather Forcast App**     |                        |                  |
+| **Diary App**     |                        |                  |
 |  Mobile - 4 - Auth and dataBase  | 100/100     |  December 06, 2024     |
 |  Mobile - 5 - Manage data and display | 100/100     |  December 09, 2024     |
 |                   |             |                 |                  |
